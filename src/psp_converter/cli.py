@@ -139,9 +139,8 @@ def _custom_configuration() -> ConversionOptions:
 
 def _suggest_output(input_path: str) -> str:
     path = Path(input_path)
-    if path.suffix:
-        return str(path.with_suffix("_psp.mp4"))
-    return f"{path}_psp.mp4"
+    base_name = path.stem if path.suffix else path.name
+    return str(path.with_name(f"{base_name}_psp.mp4"))
 
 
 def main(argv: Optional[list[str]] = None) -> int:

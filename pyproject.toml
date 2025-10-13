@@ -1,0 +1,20 @@
+[project]
+name = "psp-converter"
+version = "1.0.0"
+description = "All-in-one Sony PSP video conversion CLI"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "rich>=13.7",
+]
+
+[project.scripts]
+psp-converter = "psp_converter.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

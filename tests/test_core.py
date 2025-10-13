@@ -72,4 +72,8 @@ def test_command_with_overrides():
         "1200k",
         "-s",
     ]
-    assert command[-3:] == ["-vf", "scale=iw/2:ih/2", str(Path("~/movie.mp4").expanduser())]
+    assert command[-3:] == [
+        "-vf",
+        "scale=iw/2:ih/2",
+        str(Path("~/movie.mp4").expanduser()),
+    ]

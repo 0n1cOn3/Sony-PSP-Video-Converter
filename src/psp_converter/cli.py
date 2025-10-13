@@ -11,7 +11,12 @@ from rich.console import Console
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.table import Table
 
-from .core import ConversionOptions, apply_preset, build_ffmpeg_command, execute_ffmpeg
+from .core import (
+    ConversionOptions,
+    apply_preset,
+    build_ffmpeg_command,
+    execute_ffmpeg,
+)
 from .presets import PRESET_INDEX, PRESETS
 
 console = Console()
@@ -33,10 +38,11 @@ def _display_presets() -> None:
     table.add_column("Audio")
     for preset in PRESETS:
         width, height = preset.resolution
+        aspect = f"{preset.aspect_ratio[0]}:{preset.aspect_ratio[1]}"
         table.add_row(
             preset.key,
             preset.name,
-            f"{width}x{height} @ {preset.aspect_ratio[0]}:{preset.aspect_ratio[1]}",
+            f"{width}x{height} @ {aspect}",
             f"{preset.audio_bitrate} kbps",
         )
     console.print(table)
@@ -45,16 +51,24 @@ def _display_presets() -> None:
 def _choose_preset() -> ConversionOptions:
     _display_presets()
     key = Prompt.ask(
-        "Enter preset key", choices=[preset.key for preset in PRESETS],
+        "Enter preset key",
+        choices=[preset.key for preset in PRESETS],
         default="0",
     )
     preset = PRESET_INDEX[key.upper()]
 
     input_path = _prompt_path("Input file path")
-    output_path = _prompt_path("Output file path", default=_suggest_output(input_path))
+    suggested_output = _suggest_output(input_path)
+    output_path = _prompt_path(
+        "Output file path",
+        default=suggested_output,
+    )
 
     if Confirm.ask("Override audio bitrate?", default=False):
-        audio_bitrate = IntPrompt.ask("Audio bitrate (kbps)", default=preset.audio_bitrate)
+        audio_bitrate = IntPrompt.ask(
+            "Audio bitrate (kbps)",
+            default=preset.audio_bitrate,
+        )
     else:
         audio_bitrate = preset.audio_bitrate
 
@@ -71,8 +85,14 @@ def _choose_preset() -> ConversionOptions:
         resolution = preset.resolution
 
     if Confirm.ask("Override aspect ratio?", default=False):
-        aspect_w = IntPrompt.ask("Aspect width", default=preset.aspect_ratio[0])
-        aspect_h = IntPrompt.ask("Aspect height", default=preset.aspect_ratio[1])
+        aspect_w = IntPrompt.ask(
+            "Aspect width",
+            default=preset.aspect_ratio[0],
+        )
+        aspect_h = IntPrompt.ask(
+            "Aspect height",
+            default=preset.aspect_ratio[1],
+        )
         aspect_ratio = (aspect_w, aspect_h)
     else:
         aspect_ratio = preset.aspect_ratio
@@ -90,7 +110,11 @@ def _choose_preset() -> ConversionOptions:
 
 def _custom_configuration() -> ConversionOptions:
     input_path = _prompt_path("Input file path")
-    output_path = _prompt_path("Output file path", default=_suggest_output(input_path))
+    suggested_output = _suggest_output(input_path)
+    output_path = _prompt_path(
+        "Output file path",
+        default=suggested_output,
+    )
 
     width = IntPrompt.ask("Width", default=720)
     height = IntPrompt.ask("Height", default=480)

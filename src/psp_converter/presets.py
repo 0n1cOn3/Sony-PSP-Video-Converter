@@ -138,4 +138,7 @@ PRESETS: List[Preset] = [
     ),
 ]
 
-PRESET_INDEX: Dict[str, Preset] = {preset.key.upper(): preset for preset in PRESETS}
+PRESET_INDEX: Dict[str, Preset] = {
+    preset.key.upper(): preset
+    for preset in PRESETS
+}

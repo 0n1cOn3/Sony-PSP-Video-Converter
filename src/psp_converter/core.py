@@ -55,7 +55,13 @@ class ConversionOptions:
 def build_ffmpeg_command(options: ConversionOptions) -> List[str]:
     """Render the ffmpeg invocation for the provided options."""
 
-    command: List[str] = ["ffmpeg", "-i", options.resolved_input(), "-vcodec", options.video_codec]
+    command: List[str] = [
+        "ffmpeg",
+        "-i",
+        options.resolved_input(),
+        "-vcodec",
+        options.video_codec,
+    ]
 
     if options.video_bitrate:
         command.extend(["-b:v", f"{options.video_bitrate}k"])
@@ -111,7 +117,7 @@ def execute_ffmpeg(command: Iterable[str]) -> int:
 def apply_preset(
     preset: Preset, *, input_path: str, output_path: str, **overrides: object
 ) -> ConversionOptions:
-    """Create :class:`ConversionOptions` by combining a preset with overrides."""
+    """Build conversion options from a preset and override values."""
 
     resolution = overrides.pop("resolution", preset.resolution)
     aspect_ratio = overrides.pop("aspect_ratio", preset.aspect_ratio)

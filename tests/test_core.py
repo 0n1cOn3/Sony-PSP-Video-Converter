@@ -27,8 +27,6 @@ def test_default_command_generation():
         "baseline",
         "-level:v",
         "3.0",
-        "-x264-params",
-        "cabac=0:ref=1:bframes=0:weightp=0",
         "-pix_fmt",
         "yuv420p",
         "-r",
@@ -47,6 +45,21 @@ def test_default_command_generation():
         "psp",
         "output.mp4",
     ]
+
+
+def test_command_includes_x264_params_when_requested():
+    options = ConversionOptions(
+        input_path="in.mp4",
+        output_path="out.mp4",
+        resolution=(480, 272),
+        aspect_ratio=(16, 9),
+        x264_params=("cabac=0", "ref=1"),
+    )
+
+    command = build_ffmpeg_command(options)
+
+    assert "-x264-params" in command
+    assert command[command.index("-x264-params") + 1] == "cabac=0:ref=1"
 
 
 def test_command_with_overrides():

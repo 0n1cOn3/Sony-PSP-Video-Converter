@@ -2,6 +2,8 @@
 
 The PSP Video Converter bundles the project history into a single, text user interface (TUI) that guides you through picking presets and generating the right `ffmpeg` command line for PSP-compatible MP4 files.
 
+<img width="628" height="521" alt="grafik" src="https://github.com/user-attachments/assets/bfc6c53d-e48d-42f7-aa1d-43e5a13b940d" />
+
 ## Features
 
 - Interactive wizard powered by [Rich](https://rich.readthedocs.io) for clearer prompts and preset tables.

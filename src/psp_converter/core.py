@@ -39,9 +39,7 @@ class ConversionOptions:
     frame_rate: str = "30000/1001"
     pixel_format: str = "yuv420p"
     container_format: str = "psp"
-    x264_params: Sequence[str] = field(
-        default_factory=lambda: ("cabac=0", "ref=1", "bframes=0", "weightp=0")
-    )
+    x264_params: Optional[Sequence[str]] = None
     faststart: bool = True
     extra_args: Sequence[str] = field(default_factory=tuple)
 
@@ -76,8 +74,6 @@ def build_ffmpeg_command(options: ConversionOptions) -> List[str]:
         options.video_profile,
         "-level:v",
         options.video_level,
-        "-x264-params",
-        ":".join(options.x264_params),
         "-pix_fmt",
         options.pixel_format,
         "-r",
@@ -91,6 +87,9 @@ def build_ffmpeg_command(options: ConversionOptions) -> List[str]:
         "-ac",
         str(options.audio_channels),
     ])
+
+    if options.x264_params and "x264" in options.video_codec:
+        command.extend(["-x264-params", ":".join(options.x264_params)])
 
     if options.faststart:
         command.extend(["-movflags", "+faststart"])

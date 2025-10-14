@@ -88,7 +88,7 @@ def build_ffmpeg_command(options: ConversionOptions) -> List[str]:
         str(options.audio_channels),
     ])
 
-    if options.x264_params and "x264" in options.video_codec:
+    if options.x264_params and options.video_codec in {"libx264"}:
         command.extend(["-x264-params", ":".join(options.x264_params)])
 
     if options.faststart:
